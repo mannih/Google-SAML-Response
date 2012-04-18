@@ -1,10 +1,8 @@
-# -*- perl -*-
-
 use strict;
 use warnings;
 
-use Test::More tests => 8;
-use Test::Exception;
+use Test::More;
+use HTML::Entities;
 
 BEGIN {
     use_ok( 'Google::SAML::Response' );
@@ -29,7 +27,23 @@ ok( $saml->{service_url} eq $srvurl, 'Decoded request contains login url' );
 my $html = $saml->get_google_form( $rs );
 
 ok( $html, 'get_google_form returns something' );
-ok( $html =~ m|^Content-type: text/html\n\n|, 'Content-type is ok' );
-ok( $html =~ m|"RelayState">$rs</textarea>|, 'Form contains the relay state' );
-ok( $html =~ m|action="$srvurl"|, 'Form contains service url as action' );
-ok( $html =~ m|<samlp:Response xmlns="urn:oasis:names:tc:SAML:2.0:assertion"|, 'Form seems to contain response xml' );
+like( $html, qr|^Content-type: text/html\n\n|, 'Content-type is ok' );
+like( $html, qr|<!DOCTYPE html>|, 'form contains a doctype' );
+like( $html, qr|"RelayState">$rs</textarea>|, 'Form contains the relay state' );
+like( $html, qr|action="$srvurl"|, 'Form contains service url as action' );
+like( $html, qr|<samlp:Response xmlns="urn:oasis:names:tc:SAML:2.0:assertion"|, 'Form seems to contain response xml' );
+
+
+$rs .= '&ltmpl=gp';
+$html = $saml->get_google_form( $rs );
+
+my $encoded_rs = encode_entities( $rs );
+
+ok( $html, 'get_google_form returns something' );
+like( $html, qr|^Content-type: text/html\n\n|, 'Content-type is ok' );
+like( $html, qr|<!DOCTYPE html>|, 'form contains a doctype' );
+like( $html, qr|"RelayState">$encoded_rs</textarea>|, 'Form contains the relay state' );
+like( $html, qr|action="$srvurl"|, 'Form contains service url as action' );
+like( $html, qr|<samlp:Response xmlns="urn:oasis:names:tc:SAML:2.0:assertion"|, 'Form seems to contain response xml' );
+
+done_testing();

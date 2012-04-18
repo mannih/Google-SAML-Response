@@ -1,5 +1,9 @@
 Revision history for Perl module Google::SAML::Response
 
+0.11 Wed Apr 18 2012
+    - Many thanks to Jeremy Smith who reported that Google (sometimes?) doesn't
+      correctly encoded its relay state and who sent a patch to fix the problem.
+
 0.10 Sat Aug 07 2010
     - Many thanks to Thiago Damasceno who let me know that DSA-Key handling
       was horribly, horribly broken and then showed me how to do it correctly.

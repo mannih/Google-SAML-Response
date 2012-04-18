@@ -1,4 +1,4 @@
-#  Copyright (c) 2010 Manni Heumann. All rights reserved.
+#  Copyright (c) 2012 Manni Heumann. All rights reserved.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the same terms as Perl itself.
@@ -13,7 +13,7 @@ Google's SSO implementation
 
 =head1 VERSION
 
-You are currently reading the documentation for version 0.10
+You are currently reading the documentation for version 0.11
 
 =head1 DESCRIPTION
 
@@ -112,9 +112,10 @@ use Date::Format;
 use Compress::Zlib;
 use Google::SAML::Request;
 use Carp;
+use HTML::Entities;
 
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head2 new
 
@@ -504,15 +505,17 @@ sub get_google_form {
     my $url  = $self->{service_url};
 
     my $output = "Content-type: text/html\n\n";
+    $output .= "<!DOCTYPE html>\n";
     $output .= "<html><head></head><body onload='javascript:document.acsForm.submit()'>\n";
 
-    my $xml = $self->get_response_xml();
+    my $xml        = $self->get_response_xml();
+    my $encoded_rs = encode_entities( $rs );
 
     $output .= qq|
         <div style="display: none;">
         <form name="acsForm" action="$url" method="post">
             <textarea name="SAMLResponse">$xml</textarea>
-            <textarea name="RelayState">$rs</textarea>
+            <textarea name="RelayState">$encoded_rs</textarea>
             <input type="submit" value="Submit SAML Response" />
         </form>
         </div>
@@ -572,9 +575,11 @@ This module is part of a github repository:
 
 Manni Heumann (saml at lxxi dot org)
 
+with the help of Jeremy Smith and Thiago Damasceno. Thank you!
+
 =head1 LICENSE
 
-Copyright (c) 2008-2010 Manni Heumann. All rights reserved.
+Copyright (c) 2008-2012 Manni Heumann. All rights reserved.
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
