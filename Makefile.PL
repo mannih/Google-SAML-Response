@@ -18,6 +18,7 @@ requires 'Carp';
 requires 'XML::CanonicalizeXML';
 requires 'Test::More';
 requires 'Test::Exception';
+requires 'HTML::Entities';
 
 auto_install;
 WriteAll;
