@@ -1,6 +1,6 @@
 Revision history for Perl module Google::SAML::Response
 
-0.12 Sat Aug 31 2013
+0.13 Sat Aug 31 2013
     - The string returned by get_google_form no longer contains HTTP headers.
     - Changed github repository URL.
     - Minor code cleanup
