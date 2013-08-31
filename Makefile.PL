@@ -5,7 +5,7 @@ name 'Google-SAML-Response';
 
 all_from 'lib/Google/SAML/Response.pm';
 
-repository 'http://github.com/mannih/cpan/tree/master/Google-SAML-Response/';
+repository 'http://github.com/mannih/Google-SAML-Response/';
 
 requires 'Google::SAML::Request';
 requires 'Date::Format';

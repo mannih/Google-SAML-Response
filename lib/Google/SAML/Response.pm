@@ -567,9 +567,9 @@ compile.
 
 =head1 SOURCE CODE
 
-This module is part of a github repository:
+This module has a github repository:
 
-  http://github.com/mannih/cpan
+  https://github.com/mannih/Google-SAML-Response/
 
 =head1 AUTHOR
 
