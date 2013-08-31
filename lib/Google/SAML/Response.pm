@@ -1,4 +1,4 @@
-#  Copyright (c) 2012 Manni Heumann. All rights reserved.
+#  Copyright (c) 2013 Manni Heumann. All rights reserved.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the same terms as Perl itself.
@@ -13,7 +13,7 @@ Google's SSO implementation
 
 =head1 VERSION
 
-You are currently reading the documentation for version 0.11
+You are currently reading the documentation for version 0.12
 
 =head1 DESCRIPTION
 
@@ -38,7 +38,7 @@ passwords.
  use CGI;
 
  # get SAMLRequest parameter:
- my $req = CGI->new()->param('SAMLRequest');
+ my $req = CGI->new->param('SAMLRequest');
 
  # authenticate user
  ...
@@ -52,7 +52,7 @@ passwords.
                             login   => $login, 
                             request => $req 
             } );
- my $xml  = $saml->get_response_xml();
+ my $xml  = $saml->get_response_xml;
 
  # Alternatively, send a HTML page to the client that will redirect
  # her to Google. You have to extract the RelayState param from the cgi
@@ -90,7 +90,7 @@ L<http://www.w3.org/TR/xmldsig-core/>
 
 =item Google-Documentation on SSO and SAML
 
-L<http://code.google.com/apis/apps/sso/saml_reference_implementation.html>
+L<https://developers.google.com/google-apps/sso/saml_reference_implementation>
 
 =item XML Security Library
 
@@ -115,7 +115,7 @@ use Carp;
 use HTML::Entities;
 
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 =head2 new
 
@@ -181,14 +181,14 @@ sub new {
 
     bless $self, $class;
 
-    my $request = Google::SAML::Request->new_from_string( $self->{request} );
+    my $request = Google::SAML::Request->new_from_string( $self->{ request } );
 
-    if ( $request && $self->_load_key() ) {
-        $self->{ service_url }   = $request->AssertionConsumerServiceURL();
-        $self->{ request_id }    = $request->ID();
+    if ( $request && $self->_load_key ) {
+        $self->{ service_url }   = $request->AssertionConsumerServiceURL;
+        $self->{ request_id }    = $request->ID;
         $self->{ ttl }           = ( exists $params->{ ttl } ) ? $params->{ ttl } : 60*2;
-        $self->{ canonicalizer } = exists $params->{ canonicalizer } 
-                                    ? $params->{ canonicalizer } 
+        $self->{ canonicalizer } = exists $params->{ canonicalizer }
+                                    ? $params->{ canonicalizer }
                                     : 'XML::CanonicalizeXML';
 
         return $self;
@@ -214,13 +214,13 @@ sub _load_dsa_key {
 
     if ( $dsa_key ) {
         $self->{ key_obj } = $dsa_key;
-        my $g = encode_base64( $dsa_key->get_g(), '' );
-        my $p = encode_base64( $dsa_key->get_p(), '' );
-        my $q = encode_base64( $dsa_key->get_q(), '' );
-        my $y = encode_base64( $dsa_key->get_pub_key(), '' );
+        my $g = encode_base64( $dsa_key->get_g, '' );
+        my $p = encode_base64( $dsa_key->get_p, '' );
+        my $q = encode_base64( $dsa_key->get_q, '' );
+        my $y = encode_base64( $dsa_key->get_pub_key, '' );
 
-        $self->{KeyInfo} = "<KeyInfo><KeyValue><DSAKeyValue><P>$p</P><Q>$q</Q><G>$g</G><Y>$y</Y></DSAKeyValue></KeyValue></KeyInfo>";
-        $self->{key_type} = 'dsa';
+        $self->{ KeyInfo }  = "<KeyInfo><KeyValue><DSAKeyValue><P>$p</P><Q>$q</Q><G>$g</G><Y>$y</Y></DSAKeyValue></KeyValue></KeyInfo>";
+        $self->{ key_type } = 'dsa';
     }
     else {
         confess "did not get a new Crypt::OpenSSL::RSA object";
@@ -235,18 +235,18 @@ sub _load_rsa_key {
     my $rsaKey = Crypt::OpenSSL::RSA->new_private_key( $key_text );
 
     if ( $rsaKey ) {
-        $rsaKey->use_pkcs1_padding();
+        $rsaKey->use_pkcs1_padding;
         $self->{ key_obj } = $rsaKey;
 
-        my $bigNum = ( $rsaKey->get_key_parameters() )[1];
-        my $bin = $bigNum->to_bin();
+        my $bigNum = ( $rsaKey->get_key_parameters )[ 1 ];
+        my $bin = $bigNum->to_bin;
         my $exp = encode_base64( $bin, '' );
 
-        $bigNum = ( $rsaKey->get_key_parameters() )[0];
-        $bin = $bigNum->to_bin();
+        $bigNum = ( $rsaKey->get_key_parameters )[ 0 ];
+        $bin = $bigNum->to_bin;
         my $mod = encode_base64( $bin, '' );
-        $self->{KeyInfo} = "<KeyInfo><KeyValue><RSAKeyValue><Modulus>$mod</Modulus><Exponent>$exp</Exponent></RSAKeyValue></KeyValue></KeyInfo>";
-        $self->{key_type} = 'rsa';
+        $self->{ KeyInfo }  = "<KeyInfo><KeyValue><RSAKeyValue><Modulus>$mod</Modulus><Exponent>$exp</Exponent></RSAKeyValue></KeyValue></KeyInfo>";
+        $self->{ key_type } = 'rsa';
     }
     else {
         confess "did not get a new Crypt::OpenSSL::RSA object";
@@ -322,7 +322,7 @@ sub get_response_xml {
     my $self = shift;
 
     # This is the xml response without any signatures or digests:
-    my $xml           = $self->_response_xml();
+    my $xml           = $self->_response_xml;
 
     # We now calculate the SHA1 digest of the canoncial response xml
     my $canonical     = $self->_canonicalize_xml( $xml );
@@ -346,7 +346,7 @@ sub get_response_xml {
         $signature = encode_base64( $sig->get_r . $sig->get_s );
     }
     else {
-        my $bin_signature = $self->{key_obj}->sign( $canonical );
+        my $bin_signature = $self->{ key_obj }->sign( $canonical );
         $signature = encode_base64( $bin_signature, "\n" );
     }
 
@@ -369,7 +369,7 @@ sub _signature_xml {
     return qq{<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
             $signed_info
             <SignatureValue>$signature_value</SignatureValue>
-            $self->{KeyInfo}
+            $self->{ KeyInfo }
         </Signature>};
 }
 
@@ -380,7 +380,7 @@ sub _signedinfo_xml {
 
     return qq{<SignedInfo xmlns="http://www.w3.org/2000/09/xmldsig#" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">
                 <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments" />
-                <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#$self->{key_type}-sha1" />
+                <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#$self->{ key_type }-sha1" />
                 $digest_xml
             </SignedInfo>};
 }
@@ -404,7 +404,7 @@ sub _canonicalize_xml {
     my $self = shift;
     my $xml  = shift;
 
-    if ( $self->{canonicalizer} eq 'XML::Canonical' ) {
+    if ( $self->{ canonicalizer } eq 'XML::Canonical' ) {
         require XML::Canonical;
         my $xmlcanon = XML::Canonical->new( comments => 1 );
         return $xmlcanon->canonicalize_string( $xml );
@@ -437,13 +437,13 @@ sub _response_xml {
     my $assertion_id  = sprintf 'GOSAML%010d%04d', time, rand(10000);
 
     # The acs url
-    my $assertion_url = $self->{service_url};
+    my $assertion_url = $self->{ service_url };
 
     # The username for the authenticated user.
-    my $username      = $self->{login};
+    my $username      = $self->{ login };
 
     # A timestamp identifying the date and time after which the SAML response is deemed invalid.
-    my $best_before   = time2str( "%Y-%m-%dT%XZ", time + $self->{ttl}, 'UTC' );
+    my $best_before   = time2str( "%Y-%m-%dT%XZ", time + $self->{ ttl }, 'UTC' );
 
     # A timestamp indicating the date and time that you authenticated the user.
     my $authn_instant = $issue_instant;
@@ -580,7 +580,7 @@ with the help of Jeremy Smith and Thiago Damasceno. Thank you!
 
 =head1 LICENSE
 
-Copyright (c) 2008-2012 Manni Heumann. All rights reserved.
+Copyright (c) 2008-2013 Manni Heumann. All rights reserved.
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.

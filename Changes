@@ -1,5 +1,10 @@
 Revision history for Perl module Google::SAML::Response
 
+0.12 Sat Aug 31 2013
+    - The string returned by get_google_form no longer contains HTTP headers.
+    - Changed github repository URL.
+    - Minor code cleanup
+
 0.11 Wed Apr 18 2012
     - Many thanks to Jeremy Smith who reported that Google (sometimes?) doesn't
       correctly encoded its relay state and who sent a patch to fix the problem.
