@@ -485,8 +485,11 @@ sub _response_xml {
 
 =head2 get_google_form
 
-This function will give you a complete HTML page (including the HTTP headers) that
-you can send to clients to have them redirected to Google.
+This function will give you a complete HTML page that you can send to clients
+to have them redirected to Google. Note that former versions of this module
+also included a Content-Type HTTP header. Fortunately, this is no longer the
+case and you will have to send a "Content-Type: text/html" yourself using
+whatever method your framework provides.
 
 After all the hi-tec stuff Google wants us to do to parse their request and
 generate a response, this is where it gets low-tec and messy. We are supposed
@@ -502,13 +505,11 @@ sub get_google_form {
     my $self = shift;
     my $rs   = shift;
 
-    my $url  = $self->{service_url};
-
-    my $output = "Content-type: text/html\n\n";
-    $output .= "<!DOCTYPE html>\n";
+    my $url    = $self->{ service_url };
+    my $output = "<!DOCTYPE html>\n";
     $output .= "<html><head></head><body onload='javascript:document.acsForm.submit()'>\n";
 
-    my $xml        = $self->get_response_xml();
+    my $xml        = $self->get_response_xml;
     my $encoded_rs = encode_entities( $rs );
 
     $output .= qq|
