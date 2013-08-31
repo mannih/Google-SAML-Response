@@ -1,8 +1,4 @@
-# -*- perl -*-
-
-# t/001_load.t - check module loading
-
-use Test::More tests => 3;
+use Test::Most;
 
 BEGIN {
     use_ok( 'Google::SAML::Response' );
@@ -28,3 +24,5 @@ my $saml2 = Google::SAML::Response->new(
     }
 );
 isa_ok( $saml2, 'Google::SAML::Response' );
+
+done_testing;

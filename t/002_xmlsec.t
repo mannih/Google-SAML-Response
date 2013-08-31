@@ -1,9 +1,4 @@
-# -*- perl -*-
-
-use strict;
-use warnings;
-
-use Test::More qw/ no_plan /;
+use Test::Most;
 use File::Which;
 
 
@@ -44,3 +39,5 @@ SKIP: {
 
     unlink 'tmp.xml';
 }
+
+done_testing;

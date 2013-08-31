@@ -1,9 +1,4 @@
-# -*- perl -*-
-
-use strict;
-use warnings;
-
-use Test::More tests => 7;
+use Test::Most;
 use Test::Exception;
 
 BEGIN {
@@ -26,3 +21,5 @@ is( index( $saml->{KeyInfo}, $exponent), 405, 'Exponent is correct' );
 
 dies_ok { $saml = Google::SAML::Response->new( { key => 'foobar', request => $request, login => 'someguy' } ) } 'new shoud die when it cannot find the private key';
 dies_ok { $saml = Google::SAML::Response->new( { key => 'README', request => $request, login => 'someguy' } ) } 'new shoud die when the private key is invalid';
+
+done_testing;

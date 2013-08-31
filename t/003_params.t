@@ -1,10 +1,4 @@
-# -*- perl -*-
-
-use strict;
-use warnings;
-
-use Test::More tests => 11;
-use Test::Exception;
+use Test::Most;
 
 BEGIN {
     use_ok( 'Google::SAML::Response' );
@@ -26,3 +20,4 @@ is( $saml->{request}, $request, 'Request is stored in object' );
 is( $saml->{login}, 'someone', 'Login is stored in object' );
 is( $saml->{key}, 't/rsa.private.key', 'Key is stored in object' );
 
+done_testing;

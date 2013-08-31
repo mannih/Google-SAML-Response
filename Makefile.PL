@@ -16,7 +16,7 @@ requires 'Digest::SHA';
 requires 'File::Which';
 requires 'Carp';
 requires 'XML::CanonicalizeXML';
-requires 'Test::More';
+requires 'Test::Most';
 requires 'Test::Exception';
 requires 'HTML::Entities';
 

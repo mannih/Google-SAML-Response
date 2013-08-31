@@ -1,7 +1,4 @@
-use strict;
-use warnings;
-
-use Test::More;
+use Test::Most;
 use HTML::Entities;
 
 BEGIN {
@@ -46,4 +43,4 @@ like( $html, qr|"RelayState">$encoded_rs</textarea>|, 'Form contains the relay s
 like( $html, qr|action="$srvurl"|, 'Form contains service url as action' );
 like( $html, qr|<samlp:Response xmlns="urn:oasis:names:tc:SAML:2.0:assertion"|, 'Form seems to contain response xml' );
 
-done_testing();
+done_testing;
