@@ -5,7 +5,7 @@ Google's SSO implementation
 
 # VERSION
 
-You are currently reading the documentation for version 0.13
+You are currently reading the documentation for version 0.14
 
 # DESCRIPTION
 

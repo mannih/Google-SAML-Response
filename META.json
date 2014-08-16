@@ -74,9 +74,10 @@
          "web" : "https://github.com/mannih/Google-SAML-Response"
       }
    },
-   "version" : "0.13",
+   "version" : "0.14",
    "x_contributors" : [
       "manni <manni@5c52eb61-1380-4012-85c8-26fb47f1eac4>",
-      "Manni Heumann <heumann@strato-rz.de>"
+      "Manni Heumann <heumann@strato-rz.de>",
+      "Manni Heumann <github@lxxi.org>"
    ]
 }
