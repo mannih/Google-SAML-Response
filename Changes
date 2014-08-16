@@ -1,5 +1,8 @@
 Revision history for Perl module Google::SAML::Response
 
+{{$NEXT}}
+    - This distribution is now Minilla-managed. No code changes
+
 0.13 Sat Aug 31 2013
     - The string returned by get_google_form no longer contains HTTP headers.
     - Changed github repository URL.
