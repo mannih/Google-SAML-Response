@@ -30,7 +30,7 @@ $saml = Google::SAML::Response->new( {
     request => $request,
 } );
 
-isa_ok $saml->{ key_obj }, 'Crypt::OpenSSL::RSA', 'Key object is valid';
+isa_ok $saml->{ key_obj }, 'Crypt::PK::RSA', 'Key object is valid';
 is index( $saml->{KeyInfo}, $modulus ), 41, 'Modulus is correct';
 is index( $saml->{KeyInfo}, $exponent), 405, 'Exponent is correct';
 

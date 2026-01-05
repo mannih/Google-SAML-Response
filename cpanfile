@@ -1,7 +1,7 @@
 requires 'Carp';
 requires 'Crypt::OpenSSL::Bignum';
 requires 'Crypt::OpenSSL::DSA';
-requires 'Crypt::OpenSSL::RSA';
+requires 'Crypt::PK::RSA';
 requires 'Date::Format';
 requires 'Digest::SHA';
 requires 'File::Which';

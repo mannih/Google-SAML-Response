@@ -25,12 +25,13 @@ SKIP: {
         request => $request,
     } );
     my $xml = $saml->get_response_xml();
+
     ok $xml, 'Got XML for the response';
     ok( open XML, '>', 'tmp.xml' );
     print XML $xml;
     close XML;
-    my $verify_response = `xmlsec1 --verify tmp.xml 2>&1`;
-    ok( $verify_response =~ m/^OK/, 'Response is OK for xmlsec1' )
+    my $verify_response = `xmlsec1 --verify --id-attr:ID "Response" --lax-key-search --privkey-pem t/rsa.private.key tmp.xml 2>&1`;
+    ok( $verify_response =~ m/^(Verification status: )*OK/, 'Response is OK for xmlsec1' )
         or warn "calling xmlsec1 failed: '$verify_response'\n";
 
     unlink 'tmp.xml';
@@ -41,8 +42,8 @@ SKIP: {
     ok( open XML, '>', 'tmp.xml' );
     print XML $xml;
     close XML;
-    $verify_response = `xmlsec1 --verify tmp.xml 2>&1`;
-    ok $verify_response =~ m/^OK/, 'Response is OK for xmlsec1';
+    $verify_response = `xmlsec1 --verify --id-attr:ID "Response" --lax-key-search --privkey-pem t/dsa.private.key tmp.xml 2>&1`;
+    ok $verify_response =~ m/^(Verification status: )*OK/, 'Response is OK for xmlsec1';
 
     unlink 'tmp.xml';
 }

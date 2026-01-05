@@ -50,7 +50,7 @@
             "Carp" : "0",
             "Crypt::OpenSSL::Bignum" : "0",
             "Crypt::OpenSSL::DSA" : "0",
-            "Crypt::OpenSSL::RSA" : "0",
+            "Crypt::PK::RSA" : "0.087",
             "Date::Format" : "0",
             "Digest::SHA" : "0",
             "File::Which" : "0",

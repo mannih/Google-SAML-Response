@@ -66,9 +66,7 @@ You will need the following modules installed:
 
 =over
 
-=item * L<Crypt::OpenSSL::RSA|Crypt::OpenSSL::RSA>
-
-=item * L<Crypt::OpenSSL::Bignum|Crypt::OpenSSL::Bignum>
+=item * L<Crypt::PK::RSA|Crypt::PK::RSA>
 
 =item * L<XML::Canonical or XML::CanonicalizeXML|XML::Canonical or XML::CanonicalizeXML>
 
@@ -105,7 +103,7 @@ L<http://www.aleksey.com/xmlsec/>
 use strict;
 use warnings;
 
-use Crypt::OpenSSL::RSA;
+use Crypt::PK::RSA;
 use MIME::Base64;
 use Digest::SHA qw/ sha1 /;
 use Date::Format;
@@ -220,7 +218,7 @@ sub _load_dsa_key {
         $self->{ key_type } = 'dsa';
     }
     else {
-        confess 'did not get a new Crypt::OpenSSL::RSA object';
+        confess 'did not get a new Crypt::PK::RSA object';
     }
 }
 
@@ -229,23 +227,22 @@ sub _load_rsa_key {
     my $self     = shift;
     my $key_text = shift;
 
-    my $rsa_key = Crypt::OpenSSL::RSA->new_private_key( $key_text );
+    my $rsa_key = Crypt::PK::RSA->new();
+    $rsa_key->import_key( \$key_text );
 
     if ( $rsa_key ) {
         $self->{ key_obj } = $rsa_key;
 
-        my $big_num = ( $rsa_key->get_key_parameters )[ 1 ];
-        my $bin = $big_num->to_bin;
-        my $exp = encode_base64( $bin, '' );
+        my $key_params = $rsa_key->key2hash();
 
-        $big_num = ( $rsa_key->get_key_parameters )[ 0 ];
-        $bin = $big_num->to_bin;
-        my $mod = encode_base64( $bin, '' );
+        my $exp = encode_base64(pack("H*", $key_params->{e}), '');
+        my $mod = encode_base64(pack("H*", $key_params->{N}), '');
+
         $self->{ KeyInfo }  = "<KeyInfo><KeyValue><RSAKeyValue><Modulus>$mod</Modulus><Exponent>$exp</Exponent></RSAKeyValue></KeyValue></KeyInfo>";
         $self->{ key_type } = 'rsa';
     }
     else {
-        confess 'did not get a new Crypt::OpenSSL::RSA object';
+        confess 'did not get a new Crypt::PK::RSA object';
     }
 }
 
@@ -343,7 +340,7 @@ sub get_response_xml {
         $signature = encode_base64( $sig->get_r . $sig->get_s );
     }
     else {
-        my $bin_signature = $self->{ key_obj }->sign( $canonical );
+        my $bin_signature = $self->{ key_obj }->sign_message( $canonical, 'SHA1', 'v1.5' );
         $signature = encode_base64( $bin_signature, "\n" );
     }
 

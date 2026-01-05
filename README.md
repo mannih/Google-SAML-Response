@@ -56,7 +56,7 @@ passwords.
 
 You will need the following modules installed:
 
-- [Crypt::OpenSSL::RSA](https://metacpan.org/pod/Crypt%3A%3AOpenSSL%3A%3ARSA)
+- [Crypt::PK::RSA](https://metacpan.org/pod/Crypt%3A%3APK%3A%3ARSA)
 - [Crypt::OpenSSL::Bignum](https://metacpan.org/pod/Crypt%3A%3AOpenSSL%3A%3ABignum)
 - [XML::Canonical or XML::CanonicalizeXML](https://metacpan.org/pod/XML%3A%3ACanonical%20or%20XML%3A%3ACanonicalizeXML)
 - [Digest::SHA](https://metacpan.org/pod/Digest%3A%3ASHA)
